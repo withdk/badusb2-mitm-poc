@@ -17,6 +17,9 @@ function s($b) {
 }
 
 function g($file) {
+	$dict=@{'A'='CCN';'B'='CCS';'C'='CNC';'D'='CNN';'E'='CNS';'F'='CSC';
+		'0'='CSN';'1'='CSS';'2'='NCC';'3'='NCN';'4'='NCS';'5'='NNC';
+		'6'='NNS';'7'='NSC';'8'='NSN';'9'='NSS'};
 	s("SSS");
 	Get-Content $file -Encoding byte -ReadCount 8 | ForEach-Object { 
 		foreach ($byte in $_) { 
