@@ -1,0 +1,50 @@
+WARNING:
+This is ALPHA code only! As this project is only a proof of concept it is not meant to be used in real life situations but rather to expand the industries awareness into USB-HID MITM attacks and what may be possible. The code is also provided to aid other security researchers who may want to look into this space.
+
+LIMITATIONS:
+The USB-HID enumeration was tested on Windows targets and will likely not work for other operating-systems without a fair bit of tweaking.
+
+The code hardcodes the USB endpoint so if your keyboard uses something other than EP1-OUT then you will need to modify it.
+
+If your keyboard is more than just a keyboard the other USB functions will not work as the Facedancer's have a limited number of endpoints that you can MITM.
+
+HARDWARE NEEDED:
+x1 Linux build (tested on default install of Ubuntu 14.04)
+x1 Windows XP/7 (our target)
+x2 Facedancers
+x3 USB type A-male to USB Mini-B cables
+x1 USB Keyboard (tested on HP & Genius brands)
+
+SETUP WALKTHROUGH:
+The main requirement is the FTDI USB/Serial adapter (ftdi_sio modules) which "should" be installed by default on Ubuntu 14.04.
+
+When connecting a Facedancer you should get:
+$ dmesg 
+-- snipped --
+[ 1725.385252] usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 1725.385256] usb 1-4: Product: FT232R USB UART
+[ 1725.385259] usb 1-4: Manufacturer: FTDI
+[ 1725.385262] usb 1-4: SerialNumber: AI02BP4J
+[ 1725.398297] ftdi_sio 1-4:1.0: FTDI USB Serial Device converter detected
+[ 1725.398351] usb 1-4: Detected FT232RL
+[ 1725.403446] usb 1-4: FTDI USB Serial Device converter now attached to ttyUSB0
+
+If this is the first time using the Facedancer's you will need to flash your devices so follow the goodfet tutorial found here:
+http://goodfet.sourceforge.net/tutorial/
+
+You will need to repeat the above steps twice, one for each Facedancer. 
+
+When both Facedancers are attached to the MITM system you should now have two devices registered:
+$ ls /dev/TTYUSB*
+/dev/ttyUSB0  /dev/ttyUSB1
+
+*** IMPORTANT NOTE ***
+Before running the BadUSB2 m2p/m2h scripts ensure the Facedancer 2 peripheral is connected first so it registers on '/dev/ttyUSB0'.
+
+To run it we need to terminals open:
+# Run on the first terminal (run this first)
+sudo ./m2p.py info 
+# Run on the second terminal
+sudo ./m2h.py 
+
+I've noticed on some Windows builds that you need to re-run the python scripts in order to get the operating-system to register the keyboard. I haven't looked into why this is.
